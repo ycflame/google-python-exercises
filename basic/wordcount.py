@@ -38,12 +38,42 @@ print_words() and print_top().
 """
 
 import sys
+import string
 
 # +++your code here+++
 # Define print_words(filename) and print_top(filename) functions.
 # You could write a helper utility function that reads a file
 # and builds and returns a word/count dict for it.
 # Then print_words() and print_top() can just call the utility function.
+
+
+def return_tuples(filename):
+    word_dict = {}
+    replace_punctuation = string.maketrans(string.punctuation, ' ' * len(string.punctuation))
+    with open(filename) as f:
+        for line in f:
+            line = line.translate(replace_punctuation)
+            word_li = line.split()
+            for word in word_li:
+                if word in word_dict:
+                    word_dict[word] += 1
+                else:
+                    word_dict[word] = 1
+
+    return word_dict
+
+
+def print_words(filename):
+    word_dict = return_tuples(filename)
+    for word, count in word_dict.items():
+        print word, count
+
+
+def print_top(filename):
+    word_dict = return_tuples(filename)
+    word_li = word_dict.items()
+    for word, count in sorted(word_li, key=lambda x: x[1], reverse=True)[:20]:
+        print word, count
 
 ###
 
