@@ -41,12 +41,30 @@ def extract_names(filename):
   ['2006', 'Aaliyah 91', Aaron 57', 'Abagail 895', ' ...]
   """
   # +++your code here+++
-  return
+  YEAR = re.compile("Popularity in (?P<year>\\d+)")
+  RANK = re.compile("td\>(?P<rank>\\d+)<")
+  NAME = re.compile("td\>([a-zA-Z]+)<")
+  result = []
+  temp = []
+  with open(filename, 'r') as f:
+      for line in f:
+          year = YEAR.search(line)
+          rank = RANK.search(line)
+          name = NAME.search(line)
+          if year:
+              result.append(year.group('year'))
+
+          if rank and name:
+              rank = rank.group('rank')
+              for i in name.groups():
+                  temp.append(i + ' ' + rank)
+
+
+  return result + sorted(temp)
 
 
 def main():
-  # This command-line parsing code is provided.
-  # Make a list of command line arguments, omitting the [0] element
+  # This command-line parsing code is provided.  # Make a list of command line arguments, omitting the [0] element
   # which is the script itself.
   args = sys.argv[1:]
 
@@ -63,6 +81,16 @@ def main():
   # +++your code here+++
   # For each filename, get the names, then either print the text output
   # or write it to a summary file
-  
+  for filename in args:
+    result = extract_names(filename)
+    text = '\n'.join(result) + '\n'
+    if summary:
+      with open(filename + '.summary', 'w') as f:
+        f.write(text)
+    else:
+      print text
+
+
+
 if __name__ == '__main__':
   main()
