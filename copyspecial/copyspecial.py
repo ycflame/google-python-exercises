@@ -15,9 +15,34 @@ import commands
 """Copy Special exercise
 """
 
+SPECIAL = re.compile(r'__\w+__')
+
 # +++your code here+++
 # Write functions and modify main() to call them
+def get_special_paths(dir):
+    result = []
+    for path in os.listdir(dir):
+        if SPECIAL.search(path):
+            result.append(os.path.abspath(os.path.join(dir, path)))
 
+    return result
+
+
+def copy_to(paths, to_dir):
+    if not os.path.exists(to_dir):
+        os.mkdir(to_dir)
+    for path in paths:
+        shutil.copy(path, to_dir)
+
+
+def zip_to(paths, tozip):
+    cmd = 'zip -j' + tozip + ' ' + ' '.join(paths)
+    print "Command I'm going to do:" + cmd
+
+    (status, output) = commands.getstatusoutput(cmd)
+    if status:
+      sys.stderr.write(output)
+      sys.exit(1)
 
 
 def main():
@@ -50,6 +75,17 @@ def main():
 
   # +++your code here+++
   # Call your functions
-  
+  result = []
+  for dir in args:
+      result.extend(get_special_paths(dir))
+
+  if todir:
+    copy_to(result, todir)
+  elif tozip:
+    zip_to(result, tozip)
+  else:
+      print '\n'.join(result)
+
+
 if __name__ == "__main__":
   main()
