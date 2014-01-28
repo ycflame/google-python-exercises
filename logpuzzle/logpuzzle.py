@@ -25,7 +25,16 @@ def read_urls(filename):
   Screens out duplicate urls and returns the urls sorted into
   increasing order."""
   # +++your code here+++
-  
+  URL = re.compile(r'GET (.*\.jpg) HTTP')
+  result = []
+  with open(filename, 'r') as f:
+      for line in f:
+          match = URL.search(line)
+          if match:
+              result.append('http://code.google.com' + match.group(1))
+
+  return sorted(result, key=lambda x: x.split('-')[-1])
+
 
 def download_images(img_urls, dest_dir):
   """Given the urls already in the correct order, downloads
@@ -36,7 +45,24 @@ def download_images(img_urls, dest_dir):
   Creates the directory if necessary.
   """
   # +++your code here+++
-  
+  if not os.path.exists(dest_dir):
+      os.mkdir(dest_dir)
+
+  for i, img in enumerate(img_urls[223:]):
+      with open('%s/img%s' % (dest_dir, i + 223), 'w') as f:
+          f.write(urllib.urlopen(img).read())
+      pass
+
+  else:
+      with open('%s/index.html' % dest_dir, 'w') as f:
+          f.write('<verbatim>\n<html>\n<body>\n')
+          imgs = ''
+          for j in range(i + 1 + 223):
+              imgs += '<img src="img%s">' % j
+          f.write(imgs + '\n')
+          f.write('</body>\n')
+          f.write('</html>')
+
 
 def main():
   args = sys.argv[1:]
