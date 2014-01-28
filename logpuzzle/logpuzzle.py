@@ -48,8 +48,8 @@ def download_images(img_urls, dest_dir):
   if not os.path.exists(dest_dir):
       os.mkdir(dest_dir)
 
-  for i, img in enumerate(img_urls[223:]):
-      with open('%s/img%s' % (dest_dir, i + 223), 'w') as f:
+  for i, img in enumerate(img_urls):
+      with open('%s/img%s' % (dest_dir, i), 'w') as f:
           f.write(urllib.urlopen(img).read())
       pass
 
@@ -57,11 +57,10 @@ def download_images(img_urls, dest_dir):
       with open('%s/index.html' % dest_dir, 'w') as f:
           f.write('<verbatim>\n<html>\n<body>\n')
           imgs = ''
-          for j in range(i + 1 + 223):
+          for j in range(i + 1):
               imgs += '<img src="img%s">' % j
           f.write(imgs + '\n')
-          f.write('</body>\n')
-          f.write('</html>')
+          f.write('</body>\n') f.write('</html>')
 
 
 def main():
