@@ -1,4 +1,4 @@
 google-python-exercises
 =======================
 
-Exercises for [google python class](https://developers.google.com/edu/python).
+Completed version of [google python class exercises](https://developers.google.com/edu/python).
